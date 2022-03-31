@@ -1,7 +1,7 @@
 import BasketItems from "./BasketItems";
 
 function BasketList(props) {
-  const { order } = props;
+  const { order, decrementQuantity, incrementQuantity } = props;
   const totalPrice = order.reduce((a, b) => a + b.price * b.quantity, 0);
   return (
     <div className="bsk">
@@ -14,6 +14,8 @@ function BasketList(props) {
                 key={item.id}
                 {...item}
                 removeFromBasket={props.removeFromBasket}
+                decrementQuantity={decrementQuantity}
+                incrementQuantity={incrementQuantity}
               />
             );
           })

@@ -71,3 +71,7 @@ nav {
     opacity: 1;
   }
 }
+.btnq {
+  position: relative;
+  bottom: 6px;
+}

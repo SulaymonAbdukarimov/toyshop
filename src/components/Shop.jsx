@@ -21,45 +21,40 @@ function Shop() {
     // item === har bir objectni id name pricega teng
     // target the clicked buttons data
     // if orders id equal to the id of website we will get it
-    // let basketCopy = [...order];
-    // if (basketCopy.findIndex((el) => el.id === item.id) === -1) {
-    //   console.log("1");
-    //   basketCopy.push({ ...item, quantity: 1 });
-    // } else {
-    //   console.log(2);
-    //   basketCopy = basketCopy.map((el) => {
-    //     if (el.id === item.id) {
-    //       console.log(3);
-    //       return { ...el, quantity: el.quantity + 1 };
-    //     } else {
-    //       console.log(4);
-    //       return el;
-    //     }
-    //   });
-    // }
-    // console.log(basketCopy);
-    // setOrder(basketCopy);
-
-    const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
-    if (itemIndex < 0) {
-      const newItem = {
-        ...item,
-        quantity: 1,
-      };
-      setOrder([...order, newItem]);
+    let basketCopy = [...order];
+    if (basketCopy.findIndex((el) => el.id === item.id) === -1) {
+      basketCopy.push({ ...item, quantity: 1 });
     } else {
-      const newOrder = order.map((orderItem, index) => {
-        if (index === itemIndex) {
-          return {
-            ...orderItem,
-            quantity: orderItem.quantity + 1,
-          };
+      basketCopy = basketCopy.map((el) => {
+        if (el.id === item.id) {
+          return { ...el, quantity: el.quantity + 1 };
         } else {
-          return orderItem;
+          return el;
         }
       });
-      setOrder(newOrder);
     }
+    setOrder(basketCopy);
+
+    // const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
+    // if (itemIndex < 0) {
+    //   const newItem = {
+    //     ...item,
+    //     quantity: 1,
+    //   };
+    //   setOrder([...order, newItem]);
+    // } else {
+    //   const newOrder = order.map((orderItem, index) => {
+    //     if (index === itemIndex) {
+    //       return {
+    //         ...orderItem,
+    //         quantity: orderItem.quantity + 1,
+    //       };
+    //     } else {
+    //       return orderItem;
+    //     }
+    //   });
+    //   setOrder(newOrder);
+    // }
   };
 
   const removeFromBasket = (itemId) => {
@@ -67,6 +62,35 @@ function Shop() {
     setOrder(newOrder);
   };
 
+  const incrementQuantity = (itemID) => {
+    const newOrder = order.map((item) => {
+      if (item.id === itemID) {
+        const newQuantity = item.quantity + 1;
+        return {
+          ...item,
+          quantity: newQuantity,
+        };
+      } else {
+        return item;
+      }
+    });
+    setOrder(newOrder);
+  };
+
+  const decrementQuantity = (itemID) => {
+    const newOrder = order.map((item) => {
+      if (item.id === itemID) {
+        const newQuantity = item.quantity - 1;
+        return {
+          ...item,
+          quantity: newQuantity >= 0 ? newQuantity : 0,
+        };
+      } else {
+        return item;
+      }
+    });
+    setOrder(newOrder);
+  };
   useEffect(() => {
     fetch(API_URL, {
       headers: {
@@ -93,6 +117,8 @@ function Shop() {
           order={order}
           handleBasketShow={handleBasketShow}
           removeFromBasket={removeFromBasket}
+          incrementQuantity={incrementQuantity}
+          decrementQuantity={decrementQuantity}
         />
       )}
     </div>
