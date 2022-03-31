@@ -1,49 +1,70 @@
 import React, { useState, useEffect } from "react";
+
 import { API_URL } from "../config";
 import { API_KEY } from "../config";
 import ProductList from "./ProductList";
 import Loader from "./Loader";
 import Cart from "./Cart";
+import BasketList from "./BasketList";
+
 function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState([]);
-  console.log(order);
+  const [showBasket, setShowBasket] = useState(false);
+
+  const handleBasketShow = () => {
+    setShowBasket(!showBasket);
+  };
 
   const addToBasket = (item) => {
     // item === har bir objectni id name pricega teng
     // target the clicked buttons data
     // if orders id equal to the id of website we will get it
+    // let basketCopy = [...order];
+    // if (basketCopy.findIndex((el) => el.id === item.id) === -1) {
+    //   console.log("1");
+    //   basketCopy.push({ ...item, quantity: 1 });
+    // } else {
+    //   console.log(2);
+    //   basketCopy = basketCopy.map((el) => {
+    //     if (el.id === item.id) {
+    //       console.log(3);
+    //       return { ...el, quantity: el.quantity + 1 };
+    //     } else {
+    //       console.log(4);
+    //       return el;
+    //     }
+    //   });
+    // }
+    // console.log(basketCopy);
+    // setOrder(basketCopy);
+
     const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
-    // hali qoshilmagan bulsa
     if (itemIndex < 0) {
-      // if you clicked once only work this
       const newItem = {
         ...item,
         quantity: 1,
       };
-      console.log("working");
       setOrder([...order, newItem]);
     } else {
-      // view of basket
-      // if you clicked that card more than 1, this will work
       const newOrder = order.map((orderItem, index) => {
         if (index === itemIndex) {
-          console.log(5);
           return {
             ...orderItem,
             quantity: orderItem.quantity + 1,
           };
         } else {
-          console.log(6);
           return orderItem;
         }
       });
-      console.log(7);
       setOrder(newOrder);
     }
-    console.log(8);
-    console.log("----------------------");
+  };
+
+  const removeFromBasket = (itemId) => {
+    const newOrder = order.filter((item) => item.id !== itemId);
+    setOrder(newOrder);
   };
 
   useEffect(() => {
@@ -61,11 +82,18 @@ function Shop() {
 
   return (
     <div className="container content">
-      <Cart quantity={order.length} />
+      <Cart quantity={order.length} handleBasketShow={handleBasketShow} />
       {loading ? (
         <Loader />
       ) : (
         <ProductList products={products} addToBasket={addToBasket} />
+      )}
+      {showBasket && (
+        <BasketList
+          order={order}
+          handleBasketShow={handleBasketShow}
+          removeFromBasket={removeFromBasket}
+        />
       )}
     </div>
   );
