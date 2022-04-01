@@ -1,8 +1,14 @@
-import React from "react";
+import React, { Component } from "react";
 
 const BasketItems = (props) => {
-  const { id, name, price, quantity, incrementQuantity, decrementQuantity } =
-    props;
+  const {
+    id,
+    name,
+    price,
+    quantity,
+    incrementQuantity,
+    decrementQuantity,
+  } = props;
 
   return (
     <li className="collection-item">
@@ -23,10 +29,10 @@ const BasketItems = (props) => {
           remove
         </a>
         <a
-          class="waves-effect waves-light btn red darken-1 btnq"
+          class="waves-effect waves-light btn red darken-4 btnq deleteBtn"
           onClick={() => props.removeFromBasket(id)}
         >
-          <i className="material-icons basket-delete">delete_forever</i>
+          <i className="material-icons basket-delete left">delete_forever</i>
           delete
         </a>
       </span>

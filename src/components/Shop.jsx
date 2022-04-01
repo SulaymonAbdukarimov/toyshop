@@ -6,7 +6,6 @@ import ProductList from "./ProductList";
 import Loader from "./Loader";
 import Cart from "./Cart";
 import BasketList from "./BasketList";
-
 function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,6 +90,7 @@ function Shop() {
     });
     setOrder(newOrder);
   };
+
   useEffect(() => {
     fetch(API_URL, {
       headers: {
