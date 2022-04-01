@@ -6,6 +6,8 @@ import ProductList from "./ProductList";
 import Loader from "./Loader";
 import Cart from "./Cart";
 import BasketList from "./BasketList";
+import { toast } from "react-toastify";
+
 function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,45 +22,47 @@ function Shop() {
     // item === har bir objectni id name pricega teng
     // target the clicked buttons data
     // if orders id equal to the id of website we will get it
-    let basketCopy = [...order];
-    if (basketCopy.findIndex((el) => el.id === item.id) === -1) {
-      basketCopy.push({ ...item, quantity: 1 });
-    } else {
-      basketCopy = basketCopy.map((el) => {
-        if (el.id === item.id) {
-          return { ...el, quantity: el.quantity + 1 };
-        } else {
-          return el;
-        }
-      });
-    }
-    setOrder(basketCopy);
-
-    // const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
-    // if (itemIndex < 0) {
-    //   const newItem = {
-    //     ...item,
-    //     quantity: 1,
-    //   };
-    //   setOrder([...order, newItem]);
+    // let basketCopy = [...order];
+    // if (basketCopy.findIndex((el) => el.id === item.id) === -1) {
+    //   basketCopy.push({ ...item, quantity: 1 });
     // } else {
-    //   const newOrder = order.map((orderItem, index) => {
-    //     if (index === itemIndex) {
-    //       return {
-    //         ...orderItem,
-    //         quantity: orderItem.quantity + 1,
-    //       };
+    //   basketCopy = basketCopy.map((el) => {
+    //     if (el.id === item.id) {
+    //       return { ...el, quantity: el.quantity + 1 };
     //     } else {
-    //       return orderItem;
+    //       return el;
     //     }
     //   });
-    //   setOrder(newOrder);
     // }
+    // setOrder(basketCopy);
+
+    const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
+    if (itemIndex < 0) {
+      const newItem = {
+        ...item,
+        quantity: 1,
+      };
+      setOrder([...order, newItem]);
+    } else {
+      const newOrder = order.map((orderItem, index) => {
+        if (index === itemIndex) {
+          return {
+            ...orderItem,
+            quantity: orderItem.quantity + 1,
+          };
+        } else {
+          return orderItem;
+        }
+      });
+      setOrder(newOrder);
+    }
+    toast.success("Products added to basket successfully!");
   };
 
   const removeFromBasket = (itemId) => {
     const newOrder = order.filter((item) => item.id !== itemId);
     setOrder(newOrder);
+    toast.error("Products deleted from basket successfully!");
   };
 
   const incrementQuantity = (itemID) => {
@@ -74,6 +78,7 @@ function Shop() {
       }
     });
     setOrder(newOrder);
+    toast.success("In basket added 1 product  successfully!");
   };
 
   const decrementQuantity = (itemID) => {
@@ -89,6 +94,7 @@ function Shop() {
       }
     });
     setOrder(newOrder);
+    toast.error("In basket removed 1 product successfully!");
   };
 
   useEffect(() => {
